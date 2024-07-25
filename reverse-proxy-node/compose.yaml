@@ -13,17 +13,25 @@ services:
     volumes:
       - ./init-scripts/init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount the init.sql script
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root --password=root"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   nodejs:
     build: ./nodejs
     restart: always
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       DB_HOST: db
       DB_USER: root
       DB_PASSWORD: root
       DB_DATABASE: peopledb
+    volumes:
+      - ./nodejs:/usr/src/app  # Map the local directory to the container
 
   nginx:
     build: ./nginx
@@ -31,5 +39,6 @@ services:
       - '8080:80'
     depends_on:
       - nodejs
+
 volumes:
   mysql_data:
