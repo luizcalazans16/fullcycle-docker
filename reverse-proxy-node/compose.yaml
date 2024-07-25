@@ -32,6 +32,7 @@ services:
       DB_DATABASE: peopledb
     volumes:
       - ./nodejs:/usr/src/app
+      - /usr/src/app/node_module
 
   nginx:
     build: ./nginx
