@@ -11,7 +11,7 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - ./init-scripts/init.sql:/docker-entrypoint-initdb.d/init.sql  # Mount the init.sql script
+      - ./init-scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
       - mysql_data:/var/lib/mysql
     healthcheck:
       test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root --password=root"]
@@ -31,7 +31,7 @@ services:
       DB_PASSWORD: root
       DB_DATABASE: peopledb
     volumes:
-      - ./nodejs:/usr/src/app  # Map the local directory to the container
+      - ./nodejs:/usr/src/app
 
   nginx:
     build: ./nginx
